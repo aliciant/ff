@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- Rounded badge background, page accent navy -->
-  <rect width="32" height="32" rx="7" fill="#2E5B8C"/>
+  <!-- Rounded badge background, bright yellow for tab-bar pop -->
+  <rect width="32" height="32" rx="7" fill="#FFD60A"/>
 
-  <!-- Clean "U" for Ulin -->
+  <!-- Clean "U" for Ulin, dark charcoal for high contrast -->
   <path d="M 9.5 8 L 9.5 18 Q 9.5 23 16 23 Q 22.5 23 22.5 18 L 22.5 8"
-        stroke="#FFFFFF" stroke-width="3" fill="none"
+        stroke="#1F2937" stroke-width="3" fill="none"
         stroke-linecap="round" stroke-linejoin="round"/>
 
   <!-- Subtle plus inside the U bowl: nods to "EU + AT" -->
-  <g stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity="0.55">
+  <g stroke="#1F2937" stroke-width="1.6" stroke-linecap="round" opacity="0.55">
     <line x1="16" y1="14" x2="16" y2="18"/>
     <line x1="14" y1="16" x2="18" y2="16"/>
   </g>
