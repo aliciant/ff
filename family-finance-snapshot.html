@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where We Stand · Family Finance Snapshot</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #FAFAF7;
+    --card: #FFFFFF;
+    --ink: #1F2937;
+    --ink-soft: #4B5563;
+    --ink-muted: #6B7280;
+    --line: #E5E7EB;
+    --line-soft: #F1F1EE;
+    --good: #4A8A6E;
+    --good-bg: #ECF5F0;
+    --warn: #B07C2A;
+    --warn-bg: #FBF4E6;
+    --fire: #B43F3F;
+    --fire-bg: #FBEDED;
+    --accent: #2E5B8C;
+    --accent-bg: #ECF1F8;
+    --radar: #6B5B95;
+    --radar-bg: #F0EDF5;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .page {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 28px 32px 40px;
+  }
+  header.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  header.hero h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header.hero .meta {
+    color: var(--ink-muted);
+    font-size: 12px;
+  }
+  .north-star {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0 16px;
+    color: var(--ink);
+  }
+  .north-star strong { color: var(--accent); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin: 16px 0 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: inherit;
+    transition: color 0.15s;
+  }
+  .tab:hover { color: var(--ink-soft); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab.radar.active {
+    color: var(--radar);
+    border-bottom-color: var(--radar);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Critical banner */
+  .fire {
+    background: var(--fire-bg);
+    border: 1px solid #EBC9C9;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+  .fire .tag {
+    display: inline-block;
+    background: var(--fire);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 6px;
+  }
+  .fire h2 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: var(--fire);
+  }
+  .fire p { margin: 4px 0; font-size: 13px; }
+  .fire .why { color: var(--ink-soft); }
+  .fire .plan { font-weight: 600; }
+
+  /* Two-column main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .card h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .card.good h3 { color: var(--good); }
+  .card.warn h3 { color: var(--warn); }
+  .card.accent h3 { color: var(--accent); }
+  .card.radar h3 { color: var(--radar); }
+
+  /* Wins list */
+  .wins-list { list-style: none; margin: 0; padding: 0; }
+  .wins-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .wins-list .check {
+    display: inline-flex;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--good);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Bill rows */
+  .bill {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .bill:last-child { border-bottom: none; }
+  .bill-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+  .bill-name { font-weight: 600; font-size: 13px; }
+  .bill-amounts {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .bill-amounts .full { color: var(--ink-muted); font-size: 11px; }
+  .bar {
+    height: 6px;
+    background: #F0EFEC;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+  .bar-fill.good { background: var(--good); }
+  .bar-fill.warn { background: var(--warn); }
+  .bar-fill.fire { background: var(--fire); }
+  .bill-note {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+  .bill-note.due {
+    color: var(--fire);
+    font-weight: 600;
+  }
+  .bill-note.warn {
+    color: var(--warn);
+    font-weight: 600;
+  }
+
+  /* Other-bills section */
+  .month-bills {
+    margin-top: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .month-bills h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--warn);
+  }
+  .month-bills .row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13px;
+  }
+  .month-bills .row:last-child { border-bottom: none; }
+  .month-bills .when {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--warn);
+    text-transform: uppercase;
+  }
+  .month-bills .what { color: var(--ink); }
+  .month-bills .what em { color: var(--ink-muted); font-style: normal; font-size: 11px; display: block; margin-top: 2px; }
+  .month-bills .amount {
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Action plan */
+  .action-plan {
+    margin-top: 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .action-plan h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .actions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .actions li {
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line-soft);
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .actions li:last-child { border-bottom: none; }
+  .actions .when {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .actions .when.now { color: var(--fire); }
+  .actions .when.soon { color: var(--warn); }
+  .actions .what { font-size: 13px; color: var(--ink); }
+  .actions .what em { color: var(--ink-muted); font-style: normal; font-size: 11px; display: block; margin-top: 2px; }
+
+  /* Radar tab */
+  .radar-block {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .radar-block h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--radar);
+  }
+  .radar-block .intro {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .radar-item {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13px;
+  }
+  .radar-item:last-child { border-bottom: none; }
+  .radar-item .when {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--radar);
+    text-transform: uppercase;
+  }
+  .radar-item .amount {
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Footer / message */
+  .closing {
+    margin-top: 18px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-style: italic;
+    padding: 10px;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 16px; }
+    .tabs { display: none; }
+    .tab-panel { display: block !important; page-break-after: always; }
+    .card, .action-plan, .fire, .month-bills, .radar-block { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <h1>Where We Stand · Family Finance Snapshot</h1>
+    <div class="meta">Updated <span id="updated-date">May 13, 2026</span></div>
+  </header>
+
+  <div class="north-star">
+    <strong>Our north star:</strong> fully fund next month's bills before the end of this month. We're not there yet, and we have a clear path. Every dollar that comes in goes into a bucket in YNAB. We have full visibility. We have a plan.
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="this-month" role="tab" aria-selected="true">This Month</button>
+    <button class="tab radar" data-tab="on-the-radar" role="tab" aria-selected="false">On the Radar</button>
+  </div>
+
+  <!-- TAB 1: THIS MONTH -->
+  <section class="tab-panel active" id="this-month">
+
+    <!-- CRITICAL FIRE -->
+    <div class="fire">
+      <span class="tag">Active · Resolve by May 16</span>
+      <h2>Sixt car payment — needs action in the next 72 hours</h2>
+      <p class="why">The $1,087 Sixt payment auto-charges the Costco card on <strong>May 16</strong>. That card is currently <strong>$192 over its limit</strong>, so as it stands the charge will be declined.</p>
+      <p class="plan">Plan: pay down the Costco card before May 16 to clear the over-limit balance and create enough headroom for the $1,087 charge. Target: bring the card to ~$1,279 below limit before May 16.</p>
+    </div>
+
+    <!-- TOP ROW: wins + this week -->
+    <div class="grid">
+
+      <!-- WINS -->
+      <div class="card good">
+        <h3>What's working</h3>
+        <ul class="wins-list">
+          <li><span class="check">✓</span> Cell phone — current</li>
+          <li><span class="check">✓</span> Electric — current</li>
+          <li><span class="check">✓</span> Internet — current</li>
+          <li><span class="check">✓</span> Groceries — funded ($185)</li>
+          <li><span class="check">✓</span> HOA — we started strong with the first payment in years. Momentum is real.</li>
+          <li><span class="check">✓</span> Actively killing the old Dibs codebase to drop server cost in the coming weeks</li>
+          <li><span class="check">✓</span> Every bill tracked in YNAB. We know exactly where every dollar needs to go.</li>
+        </ul>
+      </div>
+
+      <!-- THIS WEEK -->
+      <div class="card warn">
+        <h3>This week</h3>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Camp payment — 1 of 2</span>
+            <span class="bill-amounts">$0 / $1,925</span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 0%;"></div></div>
+          <div class="bill-note due">Due May 15 · grace period from camp</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Sixt — funding buffer</span>
+            <span class="bill-amounts">$0 / $1,279</span>
+          </div>
+          <div class="bar"><div class="bar-fill fire" style="width: 0%;"></div></div>
+          <div class="bill-note due">$192 over limit + $1,087 charge May 16</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Dibs — server bill</span>
+            <span class="bill-amounts">$0 / $3,200</span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 0%;"></div></div>
+          <div class="bill-note warn">Due mid-May · can push to June 18 · MUST pay by then unless we switch servers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATCH-UP -->
+    <div class="grid" style="margin-top: 16px;">
+
+      <div class="card">
+        <h3>Catch-up · housing</h3>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">HOA (current + back)</span>
+            <span class="bill-amounts">$1,200 / $3,000</span>
+          </div>
+          <div class="bar"><div class="bar-fill good" style="width: 40%;"></div></div>
+          <div class="bill-note">Current month paid. Back balance remains.</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Rent (current month)</span>
+            <span class="bill-amounts">$95 / $4,250 <span class="full">of $8,500 total</span></span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 2.2%;"></div></div>
+          <div class="bill-note due">Plan to reach out proactively this week</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Rent back payment</span>
+            <span class="bill-amounts">$0 / $8,150</span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 0%;"></div></div>
+          <div class="bill-note due">Plan to reach out proactively this week</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Mortgage</span>
+            <span class="bill-amounts">$95 / $7,700 <span class="full">of $11,650 total</span></span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 1.2%;"></div></div>
+          <div class="bill-note due">Plan to reach out proactively this week</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">HELOC</span>
+            <span class="bill-amounts">$100 / $3,900 <span class="full">of $5,850 total</span></span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 2.6%;"></div></div>
+          <div class="bill-note due">Plan to reach out proactively this week</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Catch-up · other</h3>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Sportime</span>
+            <span class="bill-amounts">$55 / $1,431.50 <span class="full">of $2,863.60 total</span></span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 3.8%;"></div></div>
+          <div class="bill-note due">MUST PAY BY MAY 31</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Airline tickets (one-way)</span>
+            <span class="bill-amounts">$0 / $1,400</span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 0%;"></div></div>
+          <div class="bill-note">Booking one-way for now keeps cost down</div>
+        </div>
+
+        <div class="bill">
+          <div class="bill-head">
+            <span class="bill-name">Camp payment — 2 of 2</span>
+            <span class="bill-amounts">$0 / $1,925</span>
+          </div>
+          <div class="bar"><div class="bar-fill warn" style="width: 0%;"></div></div>
+          <div class="bill-note">Due June 15 · funded after #1 is paid</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LATER THIS MONTH -->
+    <div class="month-bills">
+      <h3>Also this month · smaller bills + month-end funding</h3>
+
+      <div class="row">
+        <span class="when">May 24</span>
+        <span class="what">Installment payment — 2 of 4</span>
+        <span class="amount">$190.00</span>
+      </div>
+      <div class="row">
+        <span class="when">May 27</span>
+        <span class="what">Affirm — curling iron</span>
+        <span class="amount">$48.17</span>
+      </div>
+      <div class="row">
+        <span class="when">May 29</span>
+        <span class="what">Verizon</span>
+        <span class="amount">$120.88</span>
+      </div>
+      <div class="row">
+        <span class="when">By month-end</span>
+        <span class="what">Ortho<em>Fund before May 31</em></span>
+        <span class="amount">$640.00</span>
+      </div>
+      <div class="row">
+        <span class="when">By month-end</span>
+        <span class="what">Julia's ballet<em>Fund before May 31</em></span>
+        <span class="amount">$600.00</span>
+      </div>
+    </div>
+
+    <!-- ACTION PLAN -->
+    <div class="action-plan">
+      <h3>Next 7 days · the plan</h3>
+      <ul class="actions">
+        <li>
+          <span class="when now">Today · May 13</span>
+          <span class="what">Pay down Costco card to clear the $192 over-limit and add enough headroom for the $1,087 Sixt charge.
+            <em>Target: card balance ≥ $1,279 below limit before May 16.</em></span>
+        </li>
+        <li>
+          <span class="when now">By May 15</span>
+          <span class="what">Send camp payment #1 ($1,925) to honor the grace period.
+            <em>Payment #2 ($1,925) follows by June 15.</em></span>
+        </li>
+        <li>
+          <span class="when soon">This week</span>
+          <span class="what">Make the Dibs server decision: pay $3,200 by June 18, or finish killing old codebase + switch servers in time.
+            <em>Working to lower this bill in the coming weeks.</em></span>
+        </li>
+        <li>
+          <span class="when soon">This week</span>
+          <span class="what">Proactive call to mortgage servicer.
+            <em>Goal: communicate plan, ask about hardship options or payment arrangements before they call us.</em></span>
+        </li>
+        <li>
+          <span class="when soon">This week</span>
+          <span class="what">Proactive call to HELOC servicer.
+            <em>Same playbook as mortgage. Get ahead of it.</em></span>
+        </li>
+        <li>
+          <span class="when soon">This week</span>
+          <span class="what">Proactive call to landlord / property manager.
+            <em>Communicate the plan on current month and back-payment. Ask about a workable schedule before they escalate.</em></span>
+        </li>
+        <li>
+          <span class="when">Ongoing</span>
+          <span class="what">Every incoming dollar flows through YNAB into a labeled bucket. Priority: Sixt → camp → Dibs → housing back-pay → other.
+            <em>Alicia maintains the allocation; this page updates as buckets fill.</em></span>
+        </li>
+      </ul>
+    </div>
+
+    <p class="closing">
+      We're not where we want to be. We are exactly where we know we are, with a system and a plan. That's the difference.
+    </p>
+  </section>
+
+  <!-- TAB 2: ON THE RADAR -->
+  <section class="tab-panel" id="on-the-radar">
+
+    <div class="radar-block">
+      <h3>Before Tahoe</h3>
+      <p class="intro">Things to take care of before we leave.</p>
+      <div class="radar-item">
+        <span class="when">Pre-trip</span>
+        <span class="what">Hair appointment — Alicia</span>
+        <span class="amount">$570</span>
+      </div>
+    </div>
+
+    <div class="radar-block">
+      <h3>Later this year · awareness, not urgency</h3>
+      <p class="intro">On the horizon. Not in the urgent list yet, but they're coming.</p>
+      <div class="radar-item">
+        <span class="when">Aug / Sept</span>
+        <span class="what">Hair cut — Alicia</span>
+        <span class="amount">$570</span>
+      </div>
+      <div class="radar-item">
+        <span class="when">August</span>
+        <span class="what">Hamptons rental</span>
+        <span class="amount">TBD</span>
+      </div>
+      <div class="radar-item">
+        <span class="when">Aug / Sept</span>
+        <span class="what">Hair color — Alicia</span>
+        <span class="amount">~$500</span>
+      </div>
+      <div class="radar-item">
+        <span class="when">Fall</span>
+        <span class="what">New couch</span>
+        <span class="amount">$8,900</span>
+      </div>
+      <div class="radar-item">
+        <span class="when">TBD</span>
+        <span class="what">Julia's room redo</span>
+        <span class="amount">TBD</span>
+      </div>
+    </div>
+
+    <p class="closing">
+      These don't need money right now. They need awareness so they don't become surprises.
+    </p>
+  </section>
+
+</div>
+
+<script>
+  (function() {
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const target = tab.getAttribute('data-tab');
+        tabs.forEach(function(t) {
+          t.classList.toggle('active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        panels.forEach(function(p) {
+          p.classList.toggle('active', p.id === target);
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
